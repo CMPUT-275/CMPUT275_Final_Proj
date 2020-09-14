@@ -1,0 +1,114 @@
+-------------------------------------------------------------------------
+ CMPUT 275 | Winter 2020
+ Names: Saif Husnain, Landyn David, Justin Javier, Darius Fang
+ CCIDs: sahusnai, lpugh, jjavier, dfang1
+ IDs: 1573497, 1586291, 1573754, 1570975
+
+ Final Major Project
+
+ Description: Maze Game
+
+-------------------------------------------------------------------------- 
+
+The project generates a maze with the given size and lets the user to solve the generated maze.
+The user determines the size of the maze using the joystick. The joystick will also be used in playing the maze.
+The user will be given a score of satisfaction.
+
+Saif: Client states
+Landyn: TFT display
+Justin: Algorithms
+Darius: Server states
+
+Included Files:
+	server:
+		Own code:
+			Makefile
+			server.cpp
+			maze_generator.cpp
+			maze_generator.h
+			maze_solver.cpp
+			maze_solver.h
+
+		eclass code:
+			heap.h
+			wdigraph.h
+			digraph.cpp
+			digraph.h
+			serial_port.cpp
+			serial_port.h
+
+		Modified eclass code:
+			unionfind.cpp
+			unionfind.h
+
+		PsuedoCode from eclass:
+			BFS
+			DFS
+			DIJKSTRA
+			KRUSKAL
+
+
+	client:
+		Own code:
+			client.cpp
+			drawMaze.cpp
+			drawMaze.h
+			edge.h
+			mazeSelect.cpp
+			mazeSelect.h
+			shared.h
+
+		eclass code:
+			Makefile
+
+		Modified eclass code:
+			joy_cursor.cpp
+			joy_cursor.h
+
+Accessories:
+	Joystick
+	tft display
+	arduino MEGA 560
+	wires
+
+Wiring Instructions:
+
+	Lay the TFT Display according to the pin layout on the TFT Display
+
+	Joystick Wiring
+	VRx <--> A9
+	VRy <--> A8
+	SW  <--> Digital Pin 53
+	GND <--> GND
+	+5V <--> 5V
+
+
+
+Running Instructions:
+	Clientside: make sure the arduino is connected to the correct port. Run the command "make upload". Client 1 will first select the size of the maze to the sever. Then it will recive a generated maze to be played on, using the joy cursor to move through the maze, once the maze is finished, the client will upload the time it took to the sever, and dispplays the score. The client then resets to the point of where it selects the size of the maze.
+	
+	Serverside:
+	Make sure client is running first.
+	In the same directory folder of server, run the command "make". Then run the command "./server".
+
+
+Notes and Assumptions:
+	Clientside:
+	When you recive the maze, it converts it into a bigger maze so it is easier to display. It is only alternating how it is displayed. The start and end will be the same. The options of the size of the maze are 5 x 5, 6 x 6, 7 x 7.
+
+	Serverside: The server will output on the terminal of what it send and what it recieves. "READING XY" reads the size of the specified maze selected. X is width and Y is Height. "SENDING MAZE" sends the whole maze. S is the start of the maze, N is number of edges, C is to connect the selected nodes, and E is the end of the maze. "SENDING SOLUTION" sends the fastest way to exit the maze. N is the number of edges, C is the connect nodes. "READING CLIENT" reads in the time and number of verticies. T is time and N is verticies. "SENDING SCORE" sends the score to the client. O is the score. The sever loops again to the start.
+
+	Algorithms:
+	DFS: Does not work with anything with greater than 500 x 500. if user inputs something over that is will segmentation fault. This algorithm visits neighbours randomly
+	KRUSKAL's algorthm is faster than DIJKSTRA's, but both algorithms does random weights
+
+	Making the maze:
+	After the initial maze is made, then random verticies will be generated to fill the rest of the maze.
+
+
+	Due to recent events, we could not work on the muti client. So at the moment it only works with one client. Server has client 2 codes but they are commented out since we did not test it. We haven't also tested the solnPath in maze_select(shortest path display on tft)
+	
+Problems:
+The comunication sometimes is faulty between the arduino and c++, therefore sometimes the full maze is not displayed and thus is broken. Indexing of edges do not work apparently. Sometimes there will be 2 start edges, 2 end edges, or neither or one start edge.
+
+the 7 x 7 works more often then the other 2. The 5 x 5 is the least likely to work.
